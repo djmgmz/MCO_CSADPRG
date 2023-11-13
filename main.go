@@ -17,6 +17,20 @@ type Day struct {
 }
 
 func main() {
+	days := make([]Day, 7)
+	for i := range days {
+		days[i] = Day{
+			IN:      "0900",
+			OUT:     "0900",
+			isRest:  false,
+			dayType: "Normal Day",
+		}
+	}
+
+	for i := 5; i < 7; i++ {
+		days[i].isRest = true
+	}
+
 	for {
 		fmt.Println("1) Generate Payroll")
 		fmt.Println("2)	Modify Configuration")
@@ -30,10 +44,7 @@ func main() {
 		case 1:
 			computePayroll()
 		case 2:
-			overtimeHours, regularNightShiftHours, overtimeNightShiftHours := calculateHours("2300", "0800")
-			fmt.Println("Overtime Hours:", overtimeHours)
-			fmt.Println("Regular Nightshift Hours:", regularNightShiftHours)
-			fmt.Println("Overtime Nightshift Hours:", overtimeNightShiftHours)
+			modifyConfiguration(days)
 		case 3:
 			fmt.Println("Exiting...")
 			os.Exit(0)
@@ -91,20 +102,16 @@ func isValidMilitaryTime(timeStr string) bool {
 
 func isValidDayType(dayType string) bool {
 	validDayTypes := map[string]bool{
-		"Normal Day":    true,
-		"Rest Day":      true,
-		"SNWH":          true,
-		"SNWH-Rest Day": true,
-		"RH":            true,
-		"RH-Rest Day":   true,
+		"Normal Day": true,
+		"SNWH":       true,
+		"RH":         true,
 	}
 
 	_, isValid := validDayTypes[dayType]
 	return isValid
 }
 
-func modifyConfiguration() {
-	days := make([]Day, 7)
+func modifyConfiguration(days []Day) {
 
 	for {
 		for i := 1; i <= 7; i++ {
