@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"time"
 )
 
 const dailySalary = 500
@@ -29,7 +30,10 @@ func main() {
 		case 1:
 			computePayroll()
 		case 2:
-			modifyConfiguration()
+			overtimeHours, regularNightShiftHours, overtimeNightShiftHours := calculateHours("2300", "0800")
+			fmt.Println("Overtime Hours:", overtimeHours)
+			fmt.Println("Regular Nightshift Hours:", regularNightShiftHours)
+			fmt.Println("Overtime Nightshift Hours:", overtimeNightShiftHours)
 		case 3:
 			fmt.Println("Exiting...")
 			os.Exit(0)
@@ -42,6 +46,42 @@ func main() {
 func computePayroll() {
 
 	fmt.Println("Payroll Generated")
+}
+
+func calculateHours(inTime, outTime string) (int, int, int) {
+	in, _ := time.Parse("1504", inTime)
+	out, _ := time.Parse("1504", outTime)
+	nightShiftStart := 22
+	nightShiftEnd := 6
+
+	overtimeStart := in.Add(9 * time.Hour)
+	if overtimeStart.Before(in) {
+		overtimeStart = overtimeStart.Add(24 * time.Hour)
+	}
+
+	overtimeHours := 0
+	overtimeNightShiftHours := 0
+	regularNightShiftHours := 0
+
+	if out.Before(in) {
+		out = out.Add(24 * time.Hour)
+	}
+
+	for t := in; t.Before(overtimeStart) && t.Before(out); t = t.Add(time.Hour) {
+		if t.Hour() >= nightShiftStart || t.Hour() < nightShiftEnd {
+			regularNightShiftHours++
+		}
+	}
+
+	for t := overtimeStart; t.Before(out); t = t.Add(time.Hour) {
+		if t.Hour() >= nightShiftStart || t.Hour() < nightShiftEnd {
+			overtimeNightShiftHours++
+		} else {
+			overtimeHours++
+		}
+	}
+
+	return overtimeHours, regularNightShiftHours, overtimeNightShiftHours
 }
 
 func isValidMilitaryTime(timeStr string) bool {
