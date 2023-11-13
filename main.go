@@ -35,10 +35,12 @@ func main() {
 		fmt.Println("1) Generate Payroll")
 		fmt.Println("2)	Modify Configuration")
 		fmt.Println("3) Exit")
+		fmt.Println("")
 
 		var choice int
 		fmt.Println("Enter your choice: ")
 		fmt.Scan(&choice)
+		fmt.Println("")
 
 		switch choice {
 		case 1:
@@ -89,6 +91,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 1.375\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -114,6 +117,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 1.859\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -138,6 +142,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 1.859\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -162,6 +167,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 2.145\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -186,6 +192,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 2.86\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -210,6 +217,7 @@ func computePayroll(days []Day) {
 				}
 
 				if overtimeNightShiftHours > 0 {
+					fmt.Printf("Hours on OT x NS-OT Hourly Rate\n")
 					fmt.Printf("= %d x 500 / 8 * 3.718\n", overtimeNightShiftHours)
 					fmt.Printf("= %.2f\n", OTNS)
 				}
@@ -239,7 +247,7 @@ func calculateHours(inTime, outTime string) (int, int, int) {
 
 	overtimeHours := 0
 	overtimeNightShiftHours := 0
-	regularNightShiftHours := 0
+	regularNightShiftHours := 03
 
 	if out.Before(in) {
 		out = out.Add(24 * time.Hour)
@@ -282,12 +290,14 @@ func modifyConfiguration(days []Day) {
 
 	for {
 		for i := 1; i <= 7; i++ {
-			fmt.Println(i, ")", i, "th Day")
+			fmt.Println(i, ")", "Day", i)
 		}
+		fmt.Println("")
 
 		var choice int
 		fmt.Println("Enter your choice (0 to exit): ")
 		fmt.Scan(&choice)
+		fmt.Println("")
 
 		if choice < 0 || choice > 7 {
 			fmt.Println("Invalid choice. Please enter a number between 1 and 7, or 0 to exit.")
@@ -302,8 +312,9 @@ func modifyConfiguration(days []Day) {
 
 		selectedDay := &days[dayIndex]
 
-		fmt.Printf("Selected %dth Day:\n", choice)
+		fmt.Printf("Selected Day %d:\n", choice)
 		fmt.Printf("IN: %s\nOUT: %s\nIsRest: %t\nDayType: %s\n", selectedDay.IN, selectedDay.OUT, selectedDay.isRest, selectedDay.dayType)
+		fmt.Println("")
 
 	outOfMenu:
 		for {
