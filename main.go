@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const dailySalary = 500
+const defaultSalary = 500
 
 type Day struct {
 	IN      string
@@ -42,7 +42,7 @@ func main() {
 
 		switch choice {
 		case 1:
-			computePayroll()
+			computePayroll(days)
 		case 2:
 			modifyConfiguration(days)
 		case 3:
@@ -54,8 +54,175 @@ func main() {
 	}
 }
 
-func computePayroll() {
+func computePayroll(days []Day) {
+	weeklySalary := 0.0
+	for i := 0; i < len(days); i++ {
+		dailySalary := 0.0
+		day := days[i]
+		overtimeHours, regularNightShiftHours, overtimeNightShiftHours := calculateHours(day.IN, day.OUT)
+		fmt.Printf("Day %d:\n", i+1)
 
+		if day.IN == day.OUT && day.isRest == false {
+			fmt.Println("ABSENT")
+		} else if day.IN == day.OUT && day.isRest == true {
+			fmt.Println("REST DAY")
+		} else {
+			fmt.Printf(" IN: %s\n OUT: %s\n DayType: %s\n IsRest: %t\n", day.IN, day.OUT, day.dayType, day.isRest)
+			if day.dayType == "Normal Day" && day.isRest == false {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary))
+				dailySalary += defaultSalary
+
+				OT := float64(overtimeHours) * 500 / 8 * 1.25
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 1.375
+
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 1.25\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 1.375\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			} else if day.dayType == "Normal Day" && day.isRest == true {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary*1.3))
+				dailySalary += defaultSalary * 1.3
+
+				OT := float64(overtimeHours) * 500 / 8 * 1.69
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 1.859
+
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 1.69\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 1.859\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			} else if day.dayType == "SNWH" && day.isRest == false {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary*1.3))
+				dailySalary += defaultSalary * 1.3
+
+				OT := float64(overtimeHours) * 500 / 8 * 1.69
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 1.859
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 1.69\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 1.859\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			} else if day.dayType == "SNWH" && day.isRest == true {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary*1.5))
+				dailySalary += defaultSalary * 1.5
+
+				OT := float64(overtimeHours) * 500 / 8 * 1.95
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 2.145
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 1.95\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 2.145\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			} else if day.dayType == "RH" && day.isRest == false {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary*2))
+				dailySalary += defaultSalary * 2
+
+				OT := float64(overtimeHours) * 500 / 8 * 2.6
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 2.86
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 2.6\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 2.86\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			} else if day.dayType == "RH" && day.isRest == true {
+				fmt.Printf("Base Salary: %.2f\n", float64(defaultSalary*2.6))
+				dailySalary += defaultSalary * 2.6
+
+				OT := float64(overtimeHours) * 500 / 8 * 3.38
+				NS := float64(regularNightShiftHours) * 500 / 8 * 1.10
+				OTNS := float64(overtimeNightShiftHours) * 500 / 8 * 3.718
+				if overtimeHours > 0 {
+					fmt.Printf("Hours OT x OT Hourly Rate\n")
+					fmt.Printf("= %d x 500 / 8 * 3.38\n", overtimeHours)
+					fmt.Printf("= %.2f\n", OT)
+				}
+
+				if regularNightShiftHours > 0 {
+					fmt.Printf("Hours on NS x Hourly Rate x NSD\n")
+					fmt.Printf("= %d x 500 / 8 * 1.10\n", regularNightShiftHours)
+					fmt.Printf("= %.2f\n", NS)
+				}
+
+				if overtimeNightShiftHours > 0 {
+					fmt.Printf("= %d x 500 / 8 * 3.718\n", overtimeNightShiftHours)
+					fmt.Printf("= %.2f\n", OTNS)
+				}
+				dailySalary += OT + NS + OTNS
+			}
+			fmt.Printf("Daily Salary = %.2f", dailySalary)
+			fmt.Println("")
+		}
+
+		fmt.Println("")
+		weeklySalary += dailySalary
+	}
+	fmt.Printf("Weekly Salary: %.2f\n", weeklySalary)
 	fmt.Println("Payroll Generated")
 }
 
@@ -138,6 +305,7 @@ func modifyConfiguration(days []Day) {
 		fmt.Printf("Selected %dth Day:\n", choice)
 		fmt.Printf("IN: %s\nOUT: %s\nIsRest: %t\nDayType: %s\n", selectedDay.IN, selectedDay.OUT, selectedDay.isRest, selectedDay.dayType)
 
+	outOfMenu:
 		for {
 			fmt.Println("Select property to modify:")
 			fmt.Println("1) IN")
@@ -151,7 +319,7 @@ func modifyConfiguration(days []Day) {
 
 			switch subChoice {
 			case 0:
-				break
+				break outOfMenu
 			case 1:
 				fmt.Printf("Current IN time: %s\n", selectedDay.IN)
 				fmt.Println("Enter new IN time (in military time format HHmm):")
