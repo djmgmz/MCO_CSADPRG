@@ -247,7 +247,7 @@ func calculateHours(inTime, outTime string) (int, int, int) {
 
 	overtimeHours := 0
 	overtimeNightShiftHours := 0
-	regularNightShiftHours := 03
+	regularNightShiftHours := 0
 
 	if out.Before(in) {
 		out = out.Add(24 * time.Hour)
